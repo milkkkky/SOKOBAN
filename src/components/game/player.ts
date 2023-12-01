@@ -1,24 +1,13 @@
-<template>
-  <div class="absolute" :style="position">
-    <img :src="keeperImg" alt="" />
-  </div>
-</template>
-<script setup lang="ts">
-import { computed, onMounted, onUnmounted } from "vue";
-import keeperImg from "../../assets/keeper.png";
+import { computed } from "vue";
 import { usePlayerStore } from "../../store/player";
-
-useMove();
-
-const { position } = usePosition();
-function useMove() {
+export function useMove() {
   const {
     movePlayerToLeft,
     movePlayerToRight,
     movePlayerToDown,
     movePlayerToUp,
   } = usePlayerStore();
-  function handleKeyup(e: KeyboardEvent) {
+  window.addEventListener("keyup", (e: KeyboardEvent) => {
     switch (e.code) {
       case "ArrowLeft":
         movePlayerToLeft();
@@ -35,16 +24,10 @@ function useMove() {
       default:
         break;
     }
-  }
-  onMounted(() => {
-    window.addEventListener("keyup", handleKeyup);
-  });
-  onUnmounted(() => {
-    window.removeEventListener("keyup", handleKeyup);
   });
 }
 
-function usePosition() {
+export function usePosition() {
   const { player } = usePlayerStore();
   const STEP = 32;
   const position = computed(() => {
@@ -57,5 +40,3 @@ function usePosition() {
     position,
   };
 }
-</script>
-<style scoped></style>
